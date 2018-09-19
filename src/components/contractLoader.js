@@ -24,22 +24,21 @@ class contractLoader extends React.Component {
       },
       {
         func : "balanceOf",
-        param : ["0x8cad9b4941aafb67b5a5e6dea657db2d4ea7b757"]
+        param : ["0x9cad9b4941aafb67b5a5e6dea657db2d4ea7b757"]
       },
+      {
+        func : "GSCCount",
+        param : []
+      }
     ];
 
     console.log(testList);
-    console.log(testList[0].param[0]);
 
-    const testResult = [];
-    //contract.methods. + testList[0].func + (testList[0].param[0]).call().then((_result) => {testResult[0] = _result; this.setState({result : testResult})});
-    for(let i = 0; i < 2; i++) {
-      eval("contract.methods." + testList[i].func + "(testList[i].param[0]).call().then((_result) => {testResult.push(_result);});");
+    for(let i = 0; i < 3; i++) {
+      eval("contract.methods." + testList[i].func + "(testList[i].param[0]).call().then((_result) => {this.setState({result : [...this.state.result, _result]})});");
+      console.log(this.state.result);
     }
-    console.log(testResult);
-    this.setState({
-      result : [123, ...testResult]
-    });
+    
   }
 
   render() {
@@ -47,6 +46,7 @@ class contractLoader extends React.Component {
       <div>
         <h2>Func1 Result : {this.state.result[0]}</h2>
         <h2>Func2 Result : {this.state.result[1]}</h2>
+        <h2>Func3 Result : {this.state.result[2]}</h2>
       </div>
     );
   }
