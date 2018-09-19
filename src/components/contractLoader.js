@@ -43,7 +43,7 @@ class contractLoader extends React.Component {
     this.testRunner(testList, contract).then((_result) => {
       this.setState({
         result: _result
-      });
+      })
     });
     
     //const result = this.testRunner(testList, contract);
