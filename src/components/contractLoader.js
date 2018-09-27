@@ -19,10 +19,15 @@ class contractLoader extends React.Component {
     const contract = new web3.eth.Contract(ABI, Addr);
     const testList = [];
 
-    for(let i = 0; i<5; i++) {
+    for(let i = 0; i<20; i++) {
       testList.push({
         type : "CALLFUNC",
         func : "getGSCRatio",
+        param : [i]
+      });
+      testList.push({
+        type : "CALLFUNC",
+        func : "getGSCHistory",
         param : [i]
       });
       testList.push({
