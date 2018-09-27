@@ -6,6 +6,7 @@ class contractLoader extends React.Component {
     super();
 
     this.state = {
+      test : [],
       result : []
     };
   }
@@ -16,47 +17,67 @@ class contractLoader extends React.Component {
     const Addr = "0xE8720CB8b80ffb4D93BeE736C624dc547603fc49";
     const web3 = new Web3(Web3.givenProvider);
     const contract = new web3.eth.Contract(ABI, Addr);
-    const testList = [
-      {
+    const testList = [];
+
+    for(let i = 0; i<5; i++) {
+      testList.push({
+        type : "CALLFUNC",
         func : "getGSCRatio",
-        param : [1]
-      },
-      {
+        param : [i]
+      });
+      testList.push({
+        type : "CALLFUNC",
         func : "getGSCTimestamp",
-        param : [1]
-      },
-      {
+        param : [i]
+      });
+      testList.push({
+        type : "CALLFUNC",
         func : "getGSCAddr",
-        param : [1]
-      },
-      {
-        func : "getGSCRatio",
-        param : [8]
-      },
-    ];
+        param : [i]
+      });
+    }
+    testList.push({
+      //type : "SENDFUNC",
+      func : "pay",
+      param : [0]
+    });
+
     let testResult = [];
 
     const resultUpdater = (result) => {
       testResult.push(result);
-      this.setState({result : testResult});
+      console.log(result);
+      this.setState({test : testList, result : testResult});
     }
 
-    testList.forEach(async (test) => {
-      eval("contract.methods." + test.func + "(test.param[0]).call().then((result) => {resultUpdater(result)})");
+    ABI.forEach((content) => {
+      if(content.type !== "event") console.log(content.name);
+    })
+
+    testList.forEach((test) => {
+      const sendParam = {
+        from: '0x8CAd9B4941aAfb67b5A5e6DeA657Db2d4ea7b757',
+        to: Addr,
+        value: 0 //web3.utils.toWei('0.01', 'ether')
+      }
+      if(test.type === "CALLFUNC") eval("contract.methods." + test.func + "(test.param[0]).call().then((result) => {resultUpdater(result)})");
+      if(test.type === "SENDFUNC") eval("contract.methods." + test.func + "(test.param[0]).send(sendParam).then((result) => {resultUpdater(result)})")
     });
   }
 
   render() {
+    let page = "<table border='1'><tr><th>Function/Member</th><th>Param</th><th>Result</th></tr>";
+    let i = 0;
+
+    this.state.result.forEach((result) => {
+      page += `<tr><td>${this.state.test[i].func}</td><td>${this.state.test[i].param}</td><td>${this.state.result[i]}</td></tr>`;
+      i++;
+    });
+
     return (
-      <div>
-        <h2>Func1 Result : {this.state.result[0]}</h2>
-        <h2>Func2 Result : {this.state.result[1]}</h2>
-        <h2>Func3 Result : {this.state.result[2]}</h2>
-        <h2>Func4 Result : {this.state.result[3]}</h2>
-      </div>
+      <div dangerouslySetInnerHTML={{__html: page}}></div>
     );
   }
-
 }
 
 export default contractLoader;
