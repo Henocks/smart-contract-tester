@@ -72,8 +72,8 @@ class contractLoader extends React.Component {
 
   render() {
     let page = "<table border='1'><tr><th>Function/Member</th><th>Param</th><th>Result</th></tr>";
+    
     let i = 0;
-
     this.state.result.forEach((result) => {
       page += `<tr><td>${this.state.test[i].func}</td><td>${this.state.test[i].param}</td><td>${this.state.result[i]}</td></tr>`;
       i++;
