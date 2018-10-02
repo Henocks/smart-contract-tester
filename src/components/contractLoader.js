@@ -41,6 +41,7 @@ class contractLoader extends React.Component {
         param : [i]
       });
     }
+    
     testList.push({
       //type : "SENDFUNC",
       func : "pay",
